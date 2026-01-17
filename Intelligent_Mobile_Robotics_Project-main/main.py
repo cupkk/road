@@ -1,5 +1,9 @@
+import numpy as np
 from flight_environment import FlightEnvironment
+from path_planner import plan_path
+from trajectory_generator import generate_trajectory, plot_trajectory
 
+np.random.seed(0)
 env = FlightEnvironment(50)
 start = (1,2,0)
 goal = (18,18,3)
@@ -13,7 +17,7 @@ goal = (18,18,3)
 #   - column 3 contains the z-coordinates of all path points
 # This `path` array will be provided to the `env` object for visualization.
 
-path = [[0,0,0],[1,1,1],[2,2,2],[3,3,3]]
+path = plan_path(env, start, goal)
 
 # --------------------------------------------------------------------------------------------------- #
 
@@ -33,9 +37,14 @@ env.plot_cylinders(path)
 #   Additionally, you must also plot the previously planned discrete path
 #   points on the same figure to clearly show how the continuous trajectory
 #   follows these path points.
-
-
-
+time_samples, trajectory, path_times, plot_path = generate_trajectory(
+    path,
+    v_max=1.0,
+    a_max=2.0,
+    dt=0.1,
+    env=env,
+)
+plot_trajectory(time_samples, trajectory, plot_path, path_times)
 
 # --------------------------------------------------------------------------------------------------- #
 
